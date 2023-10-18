@@ -22,6 +22,7 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
@@ -29,5 +30,8 @@ public class Cart {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
-    // other attributes, getters, and setters
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
 }

@@ -6,7 +6,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Entity
 @Table(name = "orders")
 @Data
@@ -41,4 +40,11 @@ public class Order {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
+    @Column(name = "order_status")
+    private String orderStatus;
+
+    @Column(name = "order_notes")
+    private String orderNotes;
+
 }

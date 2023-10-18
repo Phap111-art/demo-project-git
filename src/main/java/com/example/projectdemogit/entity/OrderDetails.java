@@ -1,9 +1,9 @@
 package com.example.projectdemogit.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -31,4 +31,11 @@ public class OrderDetails {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "total_price")
+    private BigDecimal totalPrice;
+
 }

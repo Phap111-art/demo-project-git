@@ -1,6 +1,5 @@
 package com.example.projectdemogit.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,4 +30,11 @@ public class Review {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
+    @Column(name = "rating")
+    private int rating;
+
+    @Column(name = "comment")
+    private String comment;
+
 }

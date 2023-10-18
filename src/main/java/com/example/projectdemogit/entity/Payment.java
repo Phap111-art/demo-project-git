@@ -3,6 +3,7 @@ package com.example.projectdemogit.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,4 +27,11 @@ public class Payment {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "amount")
+    private BigDecimal amount;
+
 }

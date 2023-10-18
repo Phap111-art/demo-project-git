@@ -18,10 +18,17 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
-    @OneToOne
-    @JoinColumn(name = "address_id")
+    @Embedded
     private Address address;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
