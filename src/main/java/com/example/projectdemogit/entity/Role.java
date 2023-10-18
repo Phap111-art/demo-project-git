@@ -27,4 +27,14 @@ public class Role {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void persistEntity() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void updateEntity() {
+        updatedAt = LocalDateTime.now();
+    }
 }

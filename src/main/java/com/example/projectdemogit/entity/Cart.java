@@ -34,4 +34,13 @@ public class Cart {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @PrePersist
+    protected void persistEntity() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void updateEntity() {
+        updatedAt = LocalDateTime.now();
+    }
 }

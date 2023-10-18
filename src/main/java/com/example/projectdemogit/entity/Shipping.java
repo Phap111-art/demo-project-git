@@ -33,4 +33,14 @@ public class Shipping {
     @Column(name = "shipping_method")
     private String shippingMethod;
 
+    @PrePersist
+    protected void persistEntity() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void updateEntity() {
+        updatedAt = LocalDateTime.now();
+    }
+
 }

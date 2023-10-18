@@ -36,4 +36,13 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
+    @PrePersist
+    protected void persistEntity() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void updateEntity() {
+        updatedAt = LocalDateTime.now();
+    }
 }

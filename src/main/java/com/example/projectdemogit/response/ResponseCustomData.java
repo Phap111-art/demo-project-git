@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseObject {
-
+@Data
+public class ResponseCustomData {
     private String mess;
-    private int statusCode;
+    private int httpStatus;
     private Object data;
 }
