@@ -1,6 +1,5 @@
 package com.example.projectdemogit.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,4 +26,11 @@ public class Shipping {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
+    @Column(name = "shipping_address")
+    private String shippingAddress;
+
+    @Column(name = "shipping_method")
+    private String shippingMethod;
+
 }

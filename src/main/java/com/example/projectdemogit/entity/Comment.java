@@ -1,6 +1,5 @@
 package com.example.projectdemogit.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,4 +32,8 @@ public class Comment {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
+    @Column(name = "content")
+    private String content;
+
 }

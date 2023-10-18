@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,8 +21,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
 
-    @OneToOne
-    @JoinColumn(name = "address_id")
+    @Embedded
     private Address address;
 
     @ManyToMany
@@ -34,6 +34,21 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     private List<Order> orders;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "salary")
+    private float salary;
+
+    @Column(name = "hire_date")
+    private Date hireDate;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
