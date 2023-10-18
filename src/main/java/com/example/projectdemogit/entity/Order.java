@@ -47,4 +47,14 @@ public class Order {
     @Column(name = "order_notes")
     private String orderNotes;
 
+    @PrePersist
+    protected void persistEntity() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void updateEntity() {
+        updatedAt = LocalDateTime.now();
+    }
+
 }

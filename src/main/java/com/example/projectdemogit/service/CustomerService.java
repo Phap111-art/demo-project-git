@@ -1,15 +1,16 @@
 package com.example.projectdemogit.service;
 
 import com.example.projectdemogit.entity.Customer;
+import com.example.projectdemogit.response.ResponseCustomData;
 import javassist.NotFoundException;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-    List<Customer> getAllCustomers();
-    Optional<Customer> getCustomerById(Long id);
-    Customer createCustomer(Customer customer);
-    Customer updateCustomer(Long id, Customer updatedCustomer);
-    boolean deleteCustomer(Long id);
+    ResponseCustomData getAllCustomers();
+    ResponseCustomData getCustomerById(Long id);
+    ResponseCustomData createCustomer(Customer customer);
+    ResponseCustomData updateCustomer(Long id, Customer updatedCustomer);
+    ResponseCustomData deleteCustomer(Long id);
 }

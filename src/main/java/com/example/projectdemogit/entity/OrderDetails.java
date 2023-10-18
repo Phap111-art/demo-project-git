@@ -38,4 +38,13 @@ public class OrderDetails {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
+    @PrePersist
+    protected void persistEntity() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void updateEntity() {
+        updatedAt = LocalDateTime.now();
+    }
 }

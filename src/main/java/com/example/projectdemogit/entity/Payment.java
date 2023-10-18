@@ -34,4 +34,13 @@ public class Payment {
     @Column(name = "amount")
     private BigDecimal amount;
 
+    @PrePersist
+    protected void persistEntity() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void updateEntity() {
+        updatedAt = LocalDateTime.now();
+    }
 }

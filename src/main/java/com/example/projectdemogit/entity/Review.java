@@ -37,4 +37,14 @@ public class Review {
     @Column(name = "comment")
     private String comment;
 
+    @PrePersist
+    protected void persistEntity() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void updateEntity() {
+        updatedAt = LocalDateTime.now();
+    }
+
 }
