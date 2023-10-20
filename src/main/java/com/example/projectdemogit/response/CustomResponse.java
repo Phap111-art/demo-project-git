@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ResponseCustomData {
+public class CustomResponse {
     private String mess;
     private int httpStatus;
     private Object data;
