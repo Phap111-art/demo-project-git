@@ -1,7 +1,14 @@
-package com.example.projectdemogit.dtos;
+package com.example.projectdemogit.dtos.customerDTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AddressDTO {
 
     @NotBlank(message = "Street is required")

@@ -1,16 +1,13 @@
 package com.example.projectdemogit.service;
 
-import com.example.projectdemogit.entity.Customer;
-import com.example.projectdemogit.response.ResponseCustomData;
-import javassist.NotFoundException;
-
-import java.util.List;
-import java.util.Optional;
+import com.example.projectdemogit.dtos.customerDTO.CreateCustomerDTO;
+import com.example.projectdemogit.dtos.customerDTO.UpdateCustomerDTO;
+import com.example.projectdemogit.response.CustomResponse;
 
 public interface CustomerService {
-    ResponseCustomData getAllCustomers();
-    ResponseCustomData getCustomerById(Long id);
-    ResponseCustomData createCustomer(Customer customer);
-    ResponseCustomData updateCustomer(Long id, Customer updatedCustomer);
-    ResponseCustomData deleteCustomer(Long id);
+    CustomResponse getAllCustomers();
+    CustomResponse getCustomerById(Long id);
+    CustomResponse createCustomer(CreateCustomerDTO customerDTO);
+    CustomResponse updateCustomer(Long id, UpdateCustomerDTO updatedCustomerDTO);
+    CustomResponse deleteCustomer(Long id);
 }
