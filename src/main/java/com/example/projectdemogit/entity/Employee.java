@@ -47,8 +47,8 @@ public class Employee {
     @Column(name = "salary")
     private float salary;
 
-    @Column(name = "hire_date")
-    private Date hireDate;
+    @Column(name = "birthday")
+    private Date birthday;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

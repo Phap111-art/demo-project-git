@@ -19,6 +19,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ProductCategory category;
+
     @Column(name = "name")
     private String name;
 
@@ -30,6 +31,24 @@ public class Product {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "brand")
+    private String brand;
+
+    @Column(name = "image")
+    private String image;
+
+    @Column(name = "weight")
+    private float weight;
+
+    @Column(name = "size")
+    private String size;
+
+    @Column(name = "color")
+    private String color;
+
+    @Column(name = "discount")
+    private float discount;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
