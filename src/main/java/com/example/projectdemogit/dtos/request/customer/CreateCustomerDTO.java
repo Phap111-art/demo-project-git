@@ -1,4 +1,4 @@
-package com.example.projectdemogit.dtos.customerDTO;
+package com.example.projectdemogit.dtos.request.customer;
 
 
 import lombok.AllArgsConstructor;
@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
@@ -15,9 +17,12 @@ import java.time.LocalDateTime;
 public class CreateCustomerDTO {
 
     @NotBlank(message = "Name is required")
+    @NotNull(message = "name not null")
+    @NotEmpty(message = "not empty")
     private String name;
 
-    @Pattern(regexp = "\\d{10}", message = "Phone number must have 10 digits")
+    @NotEmpty(message = "not empty")
+    @NotNull
     private String phone;
 
     private LocalDateTime createdAt;

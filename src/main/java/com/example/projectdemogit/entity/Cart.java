@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "carts")
@@ -12,8 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID cartId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -23,6 +24,11 @@ public class Cart {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    /*---------------------------------*/
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
@@ -30,9 +36,6 @@ public class Cart {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
-
-    @Column(name = "quantity")
-    private Integer quantity;
 
     @PrePersist
     protected void persistEntity() {

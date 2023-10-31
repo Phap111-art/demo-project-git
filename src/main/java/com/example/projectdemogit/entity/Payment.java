@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "payments")
@@ -13,13 +14,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long paymentId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID paymentId;
 
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "amount")
+    private BigDecimal amount;
+
+    /*---------------------------------*/
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
@@ -27,12 +35,6 @@ public class Payment {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
-
-    @Column(name = "payment_method")
-    private String paymentMethod;
-
-    @Column(name = "amount")
-    private BigDecimal amount;
 
     @PrePersist
     protected void persistEntity() {

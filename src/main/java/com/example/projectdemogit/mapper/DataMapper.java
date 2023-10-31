@@ -2,7 +2,7 @@ package com.example.projectdemogit.mapper;
 
 import org.modelmapper.ModelMapper;
 
-public class CustomMapper {
+public class DataMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     public static <T> T toEntity(Object dto, Class<T> entityClass) {

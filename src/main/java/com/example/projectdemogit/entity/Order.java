@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
@@ -13,16 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID orderId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
 
     @OneToOne(mappedBy = "order")
     private Payment payment;
@@ -33,6 +30,14 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderDetails> orderDetails;
 
+    @Column(name = "order_status")
+    private String orderStatus;
+
+    @Column(name = "order_notes")
+    private String orderNotes;
+
+    /*---------------------------------*/
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
@@ -40,12 +45,6 @@ public class Order {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
-
-    @Column(name = "order_status")
-    private String orderStatus;
-
-    @Column(name = "order_notes")
-    private String orderNotes;
 
     @PrePersist
     protected void persistEntity() {

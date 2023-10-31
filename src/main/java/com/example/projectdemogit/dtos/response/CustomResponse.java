@@ -1,4 +1,4 @@
-package com.example.projectdemogit.response;
+package com.example.projectdemogit.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

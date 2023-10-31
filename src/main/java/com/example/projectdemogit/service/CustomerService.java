@@ -1,13 +1,14 @@
 package com.example.projectdemogit.service;
 
-import com.example.projectdemogit.dtos.customerDTO.CreateCustomerDTO;
-import com.example.projectdemogit.dtos.customerDTO.UpdateCustomerDTO;
-import com.example.projectdemogit.response.CustomResponse;
+import com.example.projectdemogit.dtos.request.customer.CreateCustomerDTO;
+import com.example.projectdemogit.dtos.request.customer.UpdateCustomerDTO;
+import com.example.projectdemogit.dtos.response.CustomResponse;
+import org.springframework.validation.BindingResult;
 
 public interface CustomerService {
     CustomResponse getAllCustomers();
-    CustomResponse getCustomerById(Long id);
-    CustomResponse createCustomer(CreateCustomerDTO createCustomerDTO);
-    CustomResponse updateCustomer(Long id, UpdateCustomerDTO updatedCustomerDTO);
-    CustomResponse deleteCustomer(Long id);
+    CustomResponse getCustomerById(String id);
+    CustomResponse createCustomer(CreateCustomerDTO createCustomerDTO );
+    CustomResponse updateCustomer(String id, UpdateCustomerDTO updatedCustomerDTO);
+    CustomResponse deleteCustomer(String id);
 }

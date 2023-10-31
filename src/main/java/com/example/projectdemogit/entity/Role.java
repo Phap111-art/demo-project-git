@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "roles")
@@ -14,11 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID roleId;
 
     @Column(name = "name")
     private String name;
+
+    /*---------------------------------*/
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

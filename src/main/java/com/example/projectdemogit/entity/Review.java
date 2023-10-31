@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "reviews")
@@ -12,8 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID reviewId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -37,6 +38,8 @@ public class Review {
 
     @Column(name = "reported")
     private boolean reported;
+
+    /*---------------------------------*/
 
     @Column(name = "verified_purchase")
     private boolean verifiedPurchase;

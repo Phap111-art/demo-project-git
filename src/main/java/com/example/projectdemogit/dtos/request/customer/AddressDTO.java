@@ -1,4 +1,4 @@
-package com.example.projectdemogit.dtos.customerDTO;
+package com.example.projectdemogit.dtos.request.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
