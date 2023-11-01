@@ -5,22 +5,22 @@ import com.example.projectdemogit.dtos.request.customer.CreateCustomerDTO;
 import com.example.projectdemogit.dtos.request.customer.UpdateCustomerDTO;
 import com.example.projectdemogit.dtos.response.CustomResponse;
 import com.example.projectdemogit.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
+
     private final CustomerService customerService;
 
-    @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
+
 
     @GetMapping("/getAll")
     public ResponseEntity<CustomResponse> getAllCustomers() {
@@ -33,7 +33,7 @@ public class CustomerController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<CustomResponse> createCustomer(@RequestBody @Valid CreateCustomerDTO dto) {
+    public ResponseEntity<?> createCustomer(@RequestBody @Valid CreateCustomerDTO dto, BindingResult bindingResult) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(dto));
     }
 

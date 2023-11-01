@@ -1,13 +1,12 @@
 package com.example.projectdemogit.entity;
 
 
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,7 +18,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Builder
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

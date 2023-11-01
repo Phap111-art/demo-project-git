@@ -1,7 +1,6 @@
 package com.example.projectdemogit.entity;
 
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 public class Role {
     @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;
 
