@@ -1,9 +1,4 @@
-<<<<<<<< HEAD:src/main/java/com/example/projectdemogit/dtos/request/address/AddressDto.java
 package com.example.projectdemogit.dtos.request.address;
-
-========
-package com.example.projectdemogit.dtos.request.customer;
->>>>>>>> origin/main:src/main/java/com/example/projectdemogit/dtos/request/customer/AddressDTO.java
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
