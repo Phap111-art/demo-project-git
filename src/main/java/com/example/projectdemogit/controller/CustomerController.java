@@ -1,8 +1,9 @@
 package com.example.projectdemogit.controller;
 
-import com.example.projectdemogit.dtos.customerDTO.CreateCustomerDTO;
-import com.example.projectdemogit.dtos.customerDTO.UpdateCustomerDTO;
-import com.example.projectdemogit.response.CustomResponse;
+
+import com.example.projectdemogit.dtos.request.customer.CreateCustomerDTO;
+import com.example.projectdemogit.dtos.request.customer.UpdateCustomerDTO;
+import com.example.projectdemogit.dtos.response.CustomResponse;
 import com.example.projectdemogit.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class CustomerController {
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<CustomResponse> getCustomerById(@PathVariable Long id) {
+    public ResponseEntity<CustomResponse> getCustomerById(@PathVariable String id) {
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
 
@@ -37,12 +38,12 @@ public class CustomerController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CustomResponse> updateCustomer(@PathVariable Long id, @RequestBody @Valid UpdateCustomerDTO dto) {
+    public ResponseEntity<CustomResponse> updateCustomer(@PathVariable String id, @RequestBody @Valid UpdateCustomerDTO dto) {
         return ResponseEntity.ok(customerService.updateCustomer(id, dto));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<CustomResponse> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<CustomResponse> deleteCustomer(@PathVariable String id) {
         return ResponseEntity.accepted().body(customerService.deleteCustomer(id));
     }
 }

@@ -1,5 +1,6 @@
-package com.example.projectdemogit.dtos.customerDTO;
+package com.example.projectdemogit.dtos.request.customer;
 
+import com.example.projectdemogit.dtos.request.address.AddressDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class UpdateCustomerDTO {
     private String phone;
 
     @Valid
-    private AddressDTO address;
+    private AddressDto address;
 
     private LocalDateTime updatedAt;
 

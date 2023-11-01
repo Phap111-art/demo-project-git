@@ -1,24 +1,30 @@
 package com.example.projectdemogit.service.impl;
 
-import com.example.projectdemogit.dtos.customerDTO.CreateCustomerDTO;
-import com.example.projectdemogit.dtos.customerDTO.UpdateCustomerDTO;
+import com.example.projectdemogit.dtos.request.customer.CreateCustomerDTO;
+import com.example.projectdemogit.dtos.request.customer.UpdateCustomerDTO;
 import com.example.projectdemogit.entity.Customer;
-import com.example.projectdemogit.mapper.CustomMapper;
+import com.example.projectdemogit.exception.ValidationException;
+import com.example.projectdemogit.mapper.DataMapper;
 import com.example.projectdemogit.repository.CustomerRepository;
-import com.example.projectdemogit.response.CustomResponse;
+import com.example.projectdemogit.dtos.response.CustomResponse;
 import com.example.projectdemogit.service.CustomerService;
+import com.example.projectdemogit.utils.ConvertStringToUUID;
+import com.example.projectdemogit.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
-    @Autowired
+
     public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
@@ -31,55 +37,76 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomResponse getCustomerById(Long id) {
+    public CustomResponse getCustomerById(String id) {
         try {
-            Optional<Customer> customer = customerRepository.findById(id);
+            UUID uuid = ConvertStringToUUID.getUUID(id);
+            Optional<Customer> customer = customerRepository.findById(uuid);
             if (customer.isPresent()) {
                 return new CustomResponse("Found Id " + id + " successfully", HttpStatus.OK.value(), customer.get());
             } else {
                 throw new IllegalArgumentException("Not found id customer: " + id);
             }
         } catch (RuntimeException e) {
-            return new CustomResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(),null);
+            return new CustomResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), null);
         }
     }
 
     @Override
-    public CustomResponse createCustomer(CreateCustomerDTO dto) {
+    public CustomResponse createCustomer(CreateCustomerDTO dto ) {
+
         try {
-            Customer customerEntity = CustomMapper.toEntity(dto, Customer.class);
+            if (isNameNumeric(dto)) {
+                throw new IllegalArgumentException("Name must be a string, not a number.");
+            }
+            if (dto == null) {
+                throw new RuntimeException("DTO cannot be null.");
+            }
+            Customer customerEntity = DataMapper.toEntity(dto, Customer.class);
             Customer savedCustomer = customerRepository.save(customerEntity);
 
             return new CustomResponse("Save Successfully", HttpStatus.CREATED.value(),
-                    CustomMapper.toDTO(savedCustomer, CreateCustomerDTO.class));
+                    DataMapper.toDTO(savedCustomer, CreateCustomerDTO.class));
         } catch (RuntimeException e) {
-            return new CustomResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(),new CreateCustomerDTO());
+            return new CustomResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), new CreateCustomerDTO());
+        }
+    }
+
+    private boolean isNameNumeric(CreateCustomerDTO dto) {
+        String name = dto.getName();
+        try {
+            Double.parseDouble(name);
+            return true; // Nếu name là số, trả về true
+        } catch (NumberFormatException e) {
+            return false; // Nếu name không phải là số, trả về false
         }
     }
 
     @Override
-    public CustomResponse updateCustomer(Long id, UpdateCustomerDTO dto) {
+    public CustomResponse updateCustomer(String id, UpdateCustomerDTO dto) {
         try {
-            Optional<Customer> existingCustomer = customerRepository.findById(id);
-            if (existingCustomer.isPresent()){
-                Customer updatedCustomerEntity = CustomMapper.toEntity(dto, Customer.class);
-                updatedCustomerEntity.setCustomerId(id);
+            UUID uuid = ConvertStringToUUID.getUUID(id);
+            Optional<Customer> existingCustomer = customerRepository.findById(uuid);
+            if (existingCustomer.isPresent()) {
+                Customer updatedCustomerEntity = DataMapper.toEntity(dto, Customer.class);
+                updatedCustomerEntity.setCustomerId(uuid);
                 return new CustomResponse("Customer updated successfully!", HttpStatus.OK.value(),
-                        CustomMapper.toDTO(customerRepository.save(updatedCustomerEntity), UpdateCustomerDTO.class));
-            }else{
+                        DataMapper.toDTO(customerRepository.save(updatedCustomerEntity), UpdateCustomerDTO.class));
+            } else {
                 throw new IllegalArgumentException("Update failed! Customer not found: " + id);
             }
         } catch (IllegalArgumentException e) {
-            return new CustomResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(),new UpdateCustomerDTO());
+            return new CustomResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), new UpdateCustomerDTO());
         }
     }
+    //TODO : change id = string , convert string to UUID
 
     @Override
-    public CustomResponse deleteCustomer(Long id) {
+    public CustomResponse deleteCustomer(String id) {
         try {
-            Optional<Customer> existingCustomer = customerRepository.findById(id);
+            UUID uuid = ConvertStringToUUID.getUUID(id);
+            Optional<Customer> existingCustomer = customerRepository.findById(uuid);
             if (existingCustomer.isPresent()) {
-                customerRepository.deleteById(id);
+                customerRepository.deleteById(uuid);
                 return new CustomResponse("Customer deleted successfully!", HttpStatus.ACCEPTED.value(), "");
             } else {
                 throw new IllegalArgumentException("Customer not found: " + id);

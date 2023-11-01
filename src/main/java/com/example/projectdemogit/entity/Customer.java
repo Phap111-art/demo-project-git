@@ -1,11 +1,18 @@
 package com.example.projectdemogit.entity;
 
 
+
+
+
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
@@ -13,22 +20,23 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
-
-    @Embedded
-    private Address address;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID customerId;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
-    private String email;
-
     @Column(name = "phone")
     private String phone;
+
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private User user;
+
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
@@ -40,6 +48,8 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Review> reviews;
+
+    /*---------------------------------*/
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

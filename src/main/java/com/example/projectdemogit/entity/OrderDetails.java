@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "order_details")
@@ -13,8 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class OrderDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderDetailId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID orderDetailId;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -23,6 +24,8 @@ public class OrderDetails {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    /*---------------------------------*/
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

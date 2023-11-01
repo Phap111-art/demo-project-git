@@ -5,16 +5,18 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
-@Table(name = "product_category")
+@Table(name = "categorys")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductCategory {
+public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID categoryId;
 
     @Column(name = "name")
     private String name;
@@ -25,6 +27,15 @@ public class ProductCategory {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "category")
+    private Set<Product> products;
+
+    /*---------------------------------*/
+
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id")
+    private Warehouse warehouse;
 
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)

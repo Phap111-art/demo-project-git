@@ -27,10 +27,13 @@ public class ServiceLoggingAspect {
         log.info("Request URL: " + request.getRequestURL());
         log.info("Request Method: " + request.getMethod());
 
-        log.info("Call Around Before method: " + joinPoint.getArgs()[0]);
+        if (joinPoint.getArgs().length > 0) {
+            log.info("Call Around Before method: " + joinPoint.getArgs()[0]);
+        }
+
         Object result = joinPoint.proceed();
 
-        if (!(result instanceof Customer)){
+        if (joinPoint.getArgs().length > 0 && !(result instanceof Customer)){
             log.info("Call Around After method: " + joinPoint.getArgs()[0]);
         }
 

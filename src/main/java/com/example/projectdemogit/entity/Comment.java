@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "comments")
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID commentId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -25,6 +26,11 @@ public class Comment {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "content")
+    private String content;
+
+    /*---------------------------------*/
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
@@ -32,9 +38,6 @@ public class Comment {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
-
-    @Column(name = "content")
-    private String content;
 
     @PrePersist
     protected void persistEntity() {

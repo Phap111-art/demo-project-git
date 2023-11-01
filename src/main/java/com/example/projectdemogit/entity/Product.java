@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "products")
@@ -13,12 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID productId;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private ProductCategory category;
+    private Category category;
+
     @Column(name = "name")
     private String name;
 
@@ -30,6 +32,26 @@ public class Product {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "brand")
+    private String brand;
+
+    @Column(name = "image")
+    private String image;
+
+    @Column(name = "weight")
+    private float weight;
+
+    @Column(name = "size")
+    private String size;
+
+    @Column(name = "color")
+    private String color;
+
+    @Column(name = "discount")
+    private float discount;
+
+    /*---------------------------------*/
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
