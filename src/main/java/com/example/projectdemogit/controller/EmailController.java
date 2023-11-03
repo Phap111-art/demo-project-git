@@ -31,7 +31,6 @@ public class EmailController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<CustomResponse> resetPassword(@RequestParam String token, @RequestBody @Valid ResetPasswordUser dto, BindingResult result) {
-
         return ResponseEntity.ok(emailService.resetPassword(dto,result,token));
     }
 }

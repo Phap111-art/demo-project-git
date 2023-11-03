@@ -118,4 +118,9 @@ public class AuthenticationController {
     public ResponseEntity<CustomResponse> logout() {
         return ResponseEntity.ok(new CustomResponse("Logout jwt ok", HttpStatus.OK.value(), ""));
     }
+
+    @GetMapping("/hello")
+    public ResponseEntity<CustomResponse> hello() {
+        return ResponseEntity.ok(new CustomResponse("Welcome come to my hosting", HttpStatus.OK.value(), ""));
+    }
 }

@@ -168,9 +168,11 @@ public class UserServiceImpl implements UserService {
     public void createNewOrUpdateUserOAuth2(String email) {
         Optional<User> existingUser = findByEmail(email);
         if (!existingUser.isPresent()) {
+            //create user
             Role role = Role.builder().roleId(2).build();
             userRepository.save(User.builder().email(email).isActive(true).roles(Set.of(role)).build());
         } else {
+            /*update*/
             userRepository.save(existingUser.get());
         }
     }

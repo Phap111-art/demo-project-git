@@ -27,7 +27,6 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                                         Authentication authentication) throws IOException, ServletException {
 
         SecurityContext securityContext = SecurityContextHolder.getContext();
-
         DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) securityContext.getAuthentication().getPrincipal();
         String email = defaultOAuth2User.getAttribute("email") ;
         /*String name = defaultOAuth2User.getAttribute("name");

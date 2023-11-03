@@ -48,6 +48,7 @@ public class WebSecurityConfig {
         return new JwtAuthenticationFilter();
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -79,7 +80,7 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login-jwt", "/auth/create-user" ,"/forgot/**").permitAll()
+                        .requestMatchers("/auth/login-jwt", "/auth/create-user" ,"/forgot/**","/auth/hello").permitAll()
                         .requestMatchers("/auth/user").hasAuthority("USER")
                         .requestMatchers("/auth/admin").hasAuthority("ADMIN")
                         .requestMatchers("/auth/warehouse").hasAuthority("WAREHOUSE_MANAGER")
