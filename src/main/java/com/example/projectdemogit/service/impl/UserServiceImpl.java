@@ -1,65 +1,92 @@
 package com.example.projectdemogit.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.example.projectdemogit.config.CustomUserDetails;
 import com.example.projectdemogit.dtos.request.user.CreateUserDto;
 import com.example.projectdemogit.dtos.request.user.LoginUserDto;
+import com.example.projectdemogit.dtos.request.user.UpdateUserDto;
 import com.example.projectdemogit.dtos.response.CustomResponse;
+import com.example.projectdemogit.entity.Role;
 import com.example.projectdemogit.entity.User;
+import com.example.projectdemogit.exception.CustomAuthenticationException;
+import com.example.projectdemogit.exception.MultipartFileExample;
 import com.example.projectdemogit.exception.ValidationException;
+import com.example.projectdemogit.jwt.JwtTokenProvider;
 import com.example.projectdemogit.mapper.DataMapper;
 import com.example.projectdemogit.repository.UserRepository;
 import com.example.projectdemogit.service.RoleService;
 import com.example.projectdemogit.service.UserService;
 import com.example.projectdemogit.utils.ConvertStringToUUID;
+import com.example.projectdemogit.utils.UploadImageToCloudinary;
 import com.example.projectdemogit.utils.ValidationUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Value("${cloudinary.folder_product}")
+    private String cloudinaryFolderProduct;
 
+    private final Cloudinary cloudinary;
+    private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleService roleService;
 
     @Autowired
-    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleService roleService) {
+    public UserServiceImpl(Cloudinary cloudinary, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, UserRepository userRepository, RoleService roleService) {
+        this.cloudinary = cloudinary;
+        this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.roleService = roleService;
     }
 
     @Override
-    public CustomResponse createUser(CreateUserDto dto, BindingResult result) {
+    public CustomResponse createUser(String jsonUser, MultipartFile file) {
+
         try {
+            CreateUserDto dto = new ObjectMapper().readValue(jsonUser, CreateUserDto.class);
             if (userRepository.existsByEmail(dto.getEmail())) {
                 throw new ValidationException("Email already exists!");
             }
-            if (result.hasErrors()) {
-                throw new ValidationException(ValidationUtils.getValidationErrorString(result));
+//            if (result.hasErrors()) {
+//                throw new ValidationException(ValidationUtils.getValidationErrorString(result));
+//            }
+            if (file.isEmpty() || file == null) {
+                throw new MultipartFileExample("File cannot be null");
             }
+            /*upload to cloudinary */
+            String avatar =  UploadImageToCloudinary.upload(cloudinary,file,cloudinaryFolderProduct);
+            /*mapper*/
             User entity = DataMapper.toEntity(dto, User.class);
             /*set BCrypt */
             entity.setPassword(passwordEncoder.encode(dto.getPassword()));
             /*set Role  */
             entity.setRoles(roleService.getRolesByRoleIds(dto.getRoleId()));
+            entity.setAvatar(avatar);
             /*save User */
             User savedUser = userRepository.save(entity);
-            return new CustomResponse("User created successfully!", HttpStatus.CREATED.value(),savedUser);
-        } catch (RuntimeException e) {
+            return new CustomResponse("User created successfully!", HttpStatus.CREATED.value(), savedUser);
+        } catch (Exception e) {
             return new CustomResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), new CreateUserDto());
         }
     }
 
     @Override
-    public CustomResponse updateUser(String id, CreateUserDto dto, BindingResult result) {
+    public CustomResponse updateUser(String id, UpdateUserDto dto, BindingResult result) {
         try {
             UUID uuid = ConvertStringToUUID.getUUID(id);
             Optional<User> existingUser = userRepository.findById(uuid);
@@ -78,23 +105,26 @@ public class UserServiceImpl implements UserService {
             entity.setRoles(roleService.getRolesByRoleIds(dto.getRoleId()));
             /*update user*/
             User updatedUser = userRepository.save(entity);
-            return new CustomResponse("User updated successfully!", HttpStatus.OK.value(),updatedUser);
+            return new CustomResponse("User updated successfully!", HttpStatus.OK.value(), updatedUser);
         } catch (RuntimeException e) {
-            return new CustomResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), new CreateUserDto());
+            return new CustomResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), new UpdateUserDto());
         }
     }
 
     @Override
-    public CustomResponse loginUser(LoginUserDto dto, BindingResult result) {
+    public CustomResponse validateUserAndGenerateToken(LoginUserDto dto, BindingResult result, CustomUserDetails customUserDetails) {
         try {
             if (result.hasErrors()) {
                 throw new ValidationException(ValidationUtils.getValidationErrorString(result));
             }
-            User entity = DataMapper.toEntity(dto, User.class);
-            return new CustomResponse("User Login successfully!", HttpStatus.CREATED.value(),
-                    DataMapper.toDTO(entity, CreateUserDto.class));
+            if (customUserDetails == null) {
+                throw new CustomAuthenticationException("Invalid credentials");
+            }
+            // create JWT
+            String token = jwtTokenProvider.generateToken(customUserDetails);
+            return new CustomResponse("User Login successfully!", HttpStatus.CREATED.value(), "token : " + token);
         } catch (RuntimeException e) {
-            return new CustomResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value(), new CreateUserDto());
+            return new CustomResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value(), new LoginUserDto());
         }
     }
 
@@ -132,6 +162,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public void createNewOrUpdateUserOAuth2(String email) {
+        Optional<User> existingUser = findByEmail(email);
+        if (!existingUser.isPresent()) {
+            Role role = Role.builder().roleId(2).build();
+            userRepository.save(User.builder().email(email).isActive(true).roles(Set.of(role)).build());
+        } else {
+            userRepository.save(existingUser.get());
+        }
     }
 
     @Override

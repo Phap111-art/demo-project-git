@@ -1,6 +1,7 @@
 package com.example.projectdemogit.config;
 
 import com.example.projectdemogit.entity.User;
+import com.example.projectdemogit.jwt.JwtTokenProvider;
 import com.example.projectdemogit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

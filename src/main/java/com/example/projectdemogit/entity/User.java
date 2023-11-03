@@ -24,10 +24,10 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false , unique = true )
+    @Column(nullable = false, unique = true)
     protected UUID userId;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -35,17 +35,23 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @Column(nullable = false)
+    @Column
     private String username;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
     @Column(nullable = false)
     private boolean isActive;
+
+    @Column(length = 50)
+    private String passwordResetToken;
+
+    @Column(length = 500)
+    private String avatar;
 
     /*---------------------------------*/
 

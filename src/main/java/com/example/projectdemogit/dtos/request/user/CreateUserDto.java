@@ -34,6 +34,8 @@ public class CreateUserDto {
     private String email;
 
     private boolean isActive = true;
+    @NotNull
+    private String avatar;
     @Transient
     private Set<Integer> roleId ;
     private Set<Role> roles;

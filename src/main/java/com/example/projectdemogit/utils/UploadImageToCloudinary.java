@@ -19,10 +19,10 @@ import org.springframework.core.env.Environment;
 
 
 public class UploadImageToCloudinary {
-    public static void upload (Cloudinary cloudinary, MultipartFile file,String folder) throws CustomCloudinaryException {
+    public static String upload(Cloudinary cloudinary, MultipartFile file, String folder) throws CustomCloudinaryException {
         String publicId = folder + "/" + file.getOriginalFilename();
         try {
-            // lọc tất cả tài nguyên nào có tồn tại publicId trên cloudinary không
+            // Lọc tất cả tài nguyên nào có tồn tại publicId trên cloudinary không
             Api api = cloudinary.api();
             Map<?, ?> resourcesResult = api.resources(ObjectUtils.asMap(
                     "type", "upload",
@@ -38,29 +38,26 @@ public class UploadImageToCloudinary {
                 }
             }
             if (fileExists) {
-                // file đã tồn tại
+                // File đã tồn tại
                 Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
                         "public_id", publicId,
                         "overwrite", true
                 ));
-                String imageUrl = (String) uploadResult.get("url");
-                System.out.println("Updated Image URL: " + imageUrl);
-                System.out.println("file name : " + folder);
+                return publicId.substring(folder.length() + 1); // Trả về publicId của hình ảnh (đã cắt bỏ phần folder + "/")
             } else {
-                // file chưa tồn tại
+                // File chưa tồn tại
                 Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
                         "public_id", publicId,
                         "overwrite", false
                 ));
-                String imageUrl = (String) uploadResult.get("url");
-                System.out.println("New Image URL: " + imageUrl);
-                System.out.println("file name : " + folder);
-
+                return publicId.substring(folder.length() + 1); // Trả về publicId của hình ảnh (đã cắt bỏ phần folder + "/")
             }
         } catch (IOException e) {
             throw new CustomCloudinaryException(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
+
 }
